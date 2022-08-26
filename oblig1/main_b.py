@@ -9,7 +9,6 @@ import csv
 #header = next(reader)
 
 
-
 x = []
 y =[]
 z = []

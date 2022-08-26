@@ -17,8 +17,6 @@ for row in csvreader:
     y_train.append(float(row[1])) # når jeg har funnet tall buggen
 
 # print(x_train)
-
-
 x_train_tensor = torch.tensor(x_train).reshape(-1, 1)
 y_train_tensor = torch.tensor(y_train).reshape(-1, 1)
 
