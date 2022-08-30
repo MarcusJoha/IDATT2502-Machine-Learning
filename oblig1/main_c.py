@@ -42,7 +42,7 @@ model = NonLinearRegressionModel()
 
 optimizer = torch.optim.Adam([model.W, model.b], 0.001)
 
-for epoch in range(10000):
+for epoch in range(500):
     loss = model.loss(x_train, y_train)
     loss.backward()
     optimizer.step()

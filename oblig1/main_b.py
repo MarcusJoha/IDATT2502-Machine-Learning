@@ -25,7 +25,6 @@ model = LinearRegressionModel3D()
 
 loss_record = []
 
-
 optimizer = torch.optim.Adam([model.W1, model.b], 0.1)
 
 for epoch in range(35000):

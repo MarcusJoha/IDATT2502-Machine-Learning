@@ -41,7 +41,6 @@ optimizer = torch.optim.Adam([model.W, model.b], 0.001)
 for epoch in range(15000):
     model.loss(x_train_tensor, y_train_tensor).backward()
     optimizer.step()
-    
     optimizer.zero_grad()
     
     
