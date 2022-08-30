@@ -40,22 +40,28 @@ class NonLinearRegressionModel:
     
 model = NonLinearRegressionModel()
 
-optimizer = torch.optim.SGD([model.W, model.b], 0.00000001)
+optimizer = torch.optim.Adam([model.W, model.b], 0.001)
 
-for epoch in range(12000):
-    model.loss(x_train, y_train).backward()
+for epoch in range(10000):
+    loss = model.loss(x_train, y_train)
+    loss.backward()
     optimizer.step()
     optimizer.zero_grad()
+    if epoch%500==0:
+        print("epoch: {}; loss: {}".format(epoch, loss))
 
 
 # Print model variables and loss
 print("W = %s, b = %s, loss = %s" % (model.W, model.b, model.loss(x_train, y_train)))
 
+
+xs = torch.linspace(torch.min(x_train).item(), torch.max(x_train).item(), 100).reshape(100, 1)
+ys = model.f(xs)
+
 # Visualize result
 plt.plot(x_train, y_train, 'o', label='$(x^{(i)},y^{(i)})$')
 plt.xlabel('x')
 plt.ylabel('y')
-x = torch.tensor([[torch.min(x_train)], [torch.max(x_train)]])  # x = [[1], [6]]]
-plt.plot(x, model.f(x).detach(), label='$\\hat y = f(x) = xW+b$')
+plt.plot(xs, ys.detach())
 plt.legend()
 plt.show()
