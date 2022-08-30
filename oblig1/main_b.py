@@ -47,7 +47,7 @@ model = LinearRegressionModel3D()
 
 optimizer = torch.optim.SGD([model.W1, model.W2, model.b], 0.0001)
 
-for epoch in range(3000):
+for epoch in range(100000):
     model.loss(x_train, y_train, z_train).backward() #loss gradient
     optimizer.step()
     optimizer.zero_grad()

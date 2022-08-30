@@ -40,7 +40,7 @@ class NonLinearRegressionModel:
     
 model = NonLinearRegressionModel()
 
-optimizer = torch.optim.SGD([model.W, model.b], 0.0000001)
+optimizer = torch.optim.SGD([model.W, model.b], 0.00000001)
 
 for epoch in range(12000):
     model.loss(x_train, y_train).backward()
