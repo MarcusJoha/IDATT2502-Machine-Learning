@@ -1,28 +1,11 @@
 import torch
 import matplotlib.pyplot as plt
-import csv
 import pandas as pd
-
-#file = open('files/day_length_weight.csv')
-#reader = csv.reader(file, delimiter=',')
-
-#header = []
-#header = next(reader)
-
-
-
 
 data = pd.read_csv('files/day_length_weight.csv')      
 
 x_train = torch.tensor(data[['length', 'weight']].values)
 target = torch.tensor(data['day']).reshape(-1, 1)
-
-#x_train = torch.tensor(x).reshape(-1,1)
-#z_train = torch.tensor(x).reshape(-1,1)
-
-
-
-
 
 class LinearRegressionModel3D:
     def __init__(self):
