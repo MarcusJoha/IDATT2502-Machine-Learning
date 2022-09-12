@@ -34,8 +34,8 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
         self.conv = nn.Conv2d(in_channels= 1, out_channels= 32, kernel_size=5, padding=2)
         self.pool = nn.MaxPool2d(kernel_size=2)
         self.conv2 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=5, padding=2)
-        self.pool2 = nn.MaxPool2d(kernel_size=2)
-        self.dense = nn.Linear(64 * 7 * 7, 10) # fra 32*14*14 -> 64*7*7
+        self.dense1 = nn.Linear(64*7*7, 1024)
+        self.dense2 = nn.Linear(1024, 10)
 
     def logits(self, x):
         #x = self.conv(x)
@@ -45,7 +45,8 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
         
         # Greit å heller gjøre sånn:
         x = self.pool(self.conv2(self.pool(self.conv(x))))
-        return self.dense(x.reshape(-1, 64 * 7 * 7)) # Forandre denne!
+        x = self.dense1(x.view(-1, 64*7*7))
+        return self.dense2(x.view(-1, 1024)) # Forandre denne!
 
     # Predictor
     def f(self, x):
@@ -71,4 +72,4 @@ for epoch in range(20):
         optimizer.zero_grad()  # Clear gradients for next step
 
     print("accuracy = %s" % model.accuracy(x_test, y_test))
-
+    
