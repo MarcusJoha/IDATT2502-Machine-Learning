@@ -36,6 +36,7 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
         self.conv2 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=5, padding=2)
         self.dense1 = nn.Linear(64*7*7, 1024)
         self.dense2 = nn.Linear(in_features= 1024, out_features= 10)
+        self.relu = nn.ReLU()
 
     def logits(self, x):
         #x = self.conv(x)
@@ -46,7 +47,10 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
         # Greit å heller gjøre sånn:
         x = self.pool(self.conv2(self.pool(self.conv(x))))
         x = self.dense1(x.view(-1, 64*7*7))
-        return self.dense2(x.view(-1, 1024)) # Forandre denne!
+        x = self.relu(x)
+        x =  self.dense2(x.view(-1, 1024)) # Forandre denne!
+        x = self.relu(x)
+        return x;
 
     # Predictor
     def f(self, x):
@@ -67,9 +71,11 @@ model = ConvolutionalNeuralNetworkModel()
 optimizer = torch.optim.Adam(model.parameters(), 0.001)
 for epoch in range(20):
     for batch in range(len(x_train_batches)):
-        model.loss(x_train_batches[batch], y_train_batches[batch]).backward()  # Compute loss gradients
+        loss = model.loss(x_train_batches[batch], y_train_batches[batch])  # Compute loss gradients
+        loss.backward()
         optimizer.step()  # Perform optimization by adjusting W and b,
         optimizer.zero_grad()  # Clear gradients for next step
+        print("loss: {}".format(loss))
 
     print("accuracy = %s" % model.accuracy(x_test, y_test))
     
