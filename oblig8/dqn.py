@@ -13,6 +13,9 @@ import torch.nn.functional as F
 import torchvision.transforms as T
 
 
+# feature representation through back propagation
+
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 env = gym.make('CartPole-v0').unwrapped
 
@@ -81,6 +84,7 @@ class ReplayMemory(object):
 
 class DQN(nn.Module):
 
+    # Neural Network (CNN)
     def __init__(self):
         super(DQN, self).__init__()
         self.conv1 = nn.Conv2d(3, 16, kernel_size=5, stride=2)
@@ -113,7 +117,7 @@ def select_action(state):
 
 
 def optimize_model(policy_net, optimizer, memory):
-    if len(memory) < BATCH_SIZE:
+    if len(memory) < BATCH_SIZE: # More information in RL model?
         return
     transitions = memory.sample(BATCH_SIZE)
     # Transpose the batch (see http://stackoverflow.com/a/19343/3343043 for detailed explanation).
@@ -138,8 +142,9 @@ def optimize_model(policy_net, optimizer, memory):
 
     # Compute Huber loss
     loss = F.smooth_l1_loss(state_action_values, expected_state_action_values)
-    # Optimize the model
+    # Optimize the model, gradient to zero before back-propagation
     optimizer.zero_grad()
+    # Back-progagation
     loss.backward()
     for param in policy_net.parameters():
         param.grad.data.clamp_(-1, 1)
